@@ -11,6 +11,7 @@
 # Rendu le
 #
 # /////////////////////////////////////////////////////
+point = [5, 10, 20, 50, 100, 200]
 
 
 class Grid:
@@ -29,17 +30,18 @@ class Grid:
         """
         return len(self._tableau)
 
-    def get_cellule(self, x, y):
+    def get_cellule(self, x):
         """
         Assesseur en lecture de la cellule de coordonnées (x, y)
         :param x: Coordonnée en abscisse.
         :param y: Coordonnée en ordonnée.
         :return: la valeur de la cellule.
         """
-        assert (x, y) in self
-        return self._tableau[x][y]
+        assert x in self
+        return self._tableau[x[0]][x[1]]
 
-    def set_cellule(self, valeur, x, y):
+
+    def set_cellule(self, valeur, x):
         """
         Assesseur en écriture de la cellule de coordonnées (x, y)
         :param valeur: valeur à mettre en (x, y)
@@ -47,14 +49,35 @@ class Grid:
         :param y: Coordonnée en ordonnée.
         :return: Rien.
         """
-        self._tableau = valeur
+        self._tableau[x[0]][x[1]] = valeur
 
-    def __contains__(self, (x, y)):
+    def __contains__(self, x):
         """
         :param x: Coordonnée en abscisse.
         :param y: Coordonnée en ordonnée.
         :return: True si les coordonnées x et y sont valides. False sinon.
         """
         taille = self.get_taille()
-        return x * y >= 0 and x * y < taille ** 2
+        return x[0] * x[1] >= 0 and x[0] < taille and x[1] < taille
 
+
+    def affichage_grille(self, position):
+        """
+        Affiche la grille dans la console.
+        :param position: actuelle du joueur
+        :return: Rien
+        """
+        max_length = max(len(str(nombre)) for nombre in point)
+        for i in range(self.get_taille()):
+            ligne_a_afficher = ""
+            for j in range(self.get_taille()):
+                if [j, i] == position:
+                    ligne_a_afficher += " {0}".format("#" * max_length)
+                else:
+                    valeur = self.get_cellule((j, i))
+                    ligne_a_afficher += " {0: <{width}}{1}".format("", ["0", str(valeur)][type(valeur) == int],
+                                                                   width=max_length - [1, len(str(valeur))][
+                                                                       type(valeur) == int])
+            print(ligne_a_afficher)
+        print ("\n")
+        return None

@@ -44,3 +44,9 @@ class Player:
         """
         self._score += valeur
 
+    def affiche_joueur(self, max_taille_nom):
+        """
+        Affiche les noms des joueurs et leurs scores.
+        :return: Rien
+        """
+        print("{0: <{width}} : {1}".format(self.get_nom(), self.get_score(), width=max_taille_nom - len(self.get_nom())))
