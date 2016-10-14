@@ -22,7 +22,7 @@ class Grid:
         Si la taille est paire ou négative, on raise une exception.
         """
 
-        if taille % 2 == 0 or taille<0:
+        if taille % 2 == 0 or taille < 0:
             raise ValueError()
         else:
             self._tableau = [[None for i in range(int(taille))] for i in range(taille)]
@@ -35,28 +35,24 @@ class Grid:
 
         return len(self._tableau)
 
-    def get_cellule(self, x):
+    def __getitem__(self, xy):
         """
-        Assesseur en lecture de la cellule de coordonnées (x, y)
-        :param x: Coordonnée en abscisse.
-        :param y: Coordonnée en ordonnée.
-        :return: la valeur de la cellule.
-        """
-
-        assert x in self
-        return self._tableau[x[0]][x[1]]
-
-
-    def set_cellule(self, valeur, x):
-        """
-        Assesseur en écriture de la cellule de coordonnées (x, y)
-        :param valeur: valeur à mettre dans la cellule de coordonnées (x, y)
-        :param x: Coordonnée en abscisse.
-        :param y: Coordonnée en ordonnée.
-        :return: Rien.
+        Assesseur en lecture de la cellule de coordonnées xy
+        :param xy: coordonnées de la cellule à lire
+        :return: la valeur de la cellule
         """
 
-        self._tableau[x[0]][x[1]] = valeur
+        assert xy in self
+        return self._tableau[xy[0]][xy[1]]
+
+    def __setitem__(self, xy, valeur):
+        """
+        Assesseur en écriture de la cellule de coordonnées xy
+        :param xy: coordonnées de la cellule à écrire
+        :param valeur: valeur à mettre dans la cellule.
+        :return:
+        """
+        self._tableau[xy[0]][xy[1]] = valeur
 
     def __contains__(self, x):
         """
@@ -67,7 +63,6 @@ class Grid:
 
         taille = self.get_taille()
         return x[0] * x[1] >= 0 and x[0] < taille and x[1] < taille
-
 
     def affichage_grille(self, position):
         """
@@ -83,11 +78,11 @@ class Grid:
                 if [j, i] == position:
                     ligne_a_afficher += " {0}".format("#" * max_length)
                 else:
-                    valeur = self.get_cellule((j, i))
+                    valeur = self[(j, i)]
                     ligne_a_afficher += " {0: <{width}}{1}".format("",
-                                        ["0", str(valeur)][isinstance(valeur, int)],
-                                        width=max_length - [1, len(str(valeur))][
-                                        isinstance(valeur, int)])
+                                                                   ["0", str(valeur)][isinstance(valeur, int)],
+                                                                   width=max_length - [1, len(str(valeur))][
+                                                                       isinstance(valeur, int)])
             print(ligne_a_afficher)
         print("\n")
         return None

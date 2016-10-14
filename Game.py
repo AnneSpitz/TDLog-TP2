@@ -52,11 +52,12 @@ class Game:
         self.joueur_courant = 0
 
         assert (isinstance(taille, int))
-        self.tableau = Grid(taille)
+        self.grille_jeu = Grid(taille)
         for x in range(taille):
             for y in range(taille):
-                self.tableau.set_cellule(choice(point), (x, y))
-
+                self.grille_jeu[(x, y)] = choice(point)
+        self.grille_jeu[
+            (taille // 2, taille // 2)] = None  # La position initiale est mise à 0 : elle est déjà explorée.
         self.liste_joueurs = [Player(joueur_1), Player(joueur_2)]
 
         self.positions = [taille // 2, taille // 2]
@@ -85,9 +86,9 @@ class Game:
             return True
         else:
             position_voulue = add(self.positions, direction_acceptable[direction])
-            if position_voulue not in self.tableau:
+            if position_voulue not in self.grille_jeu:
                 return True
-            elif not isinstance(self.tableau.get_cellule(position_voulue), int):
+            elif not isinstance(self.grille_jeu[position_voulue], int):
                 return True
             else:
                 return False
@@ -101,13 +102,15 @@ class Game:
 
         direction = self.demande_direction()
 
+        # On demande la direction tant que celle-ci n'est pas valide.
         while self.is_direction_non_valide(direction):
             direction = self.demande_direction()
 
+        # Une fois la position valide, on bouge le pion, ajoute les points, modifie la grille et change de joueur.
         self.positions = add(self.positions, direction_acceptable[direction])
         self.liste_joueurs[self.joueur_courant].augmente_score(
-            self.tableau.get_cellule(self.positions))
-        self.tableau.set_cellule(None, self.positions)
+            self.grille_jeu[self.positions])
+        self.grille_jeu[self.positions] = None
         self.joueur_courant = (self.joueur_courant + 1) % 2
 
         return None
@@ -122,8 +125,8 @@ class Game:
 
         for direction in direction_acceptable.values():
             position_testee = add(self.positions, direction)
-            if position_testee in self.tableau and isinstance(
-                    self.tableau.get_cellule(position_testee), int):
+            if position_testee in self.grille_jeu and isinstance(
+                    self.grille_jeu[position_testee], int):
                 return False
         return True
 
@@ -159,7 +162,7 @@ class Game:
         print("\n\n==============================================\n"
               "==============================================\n \n \n")
 
-        self.tableau.affichage_grille(self.positions)
+        self.grille_jeu.affichage_grille(self.positions)
         max_length = max(len(self.liste_joueurs[i].get_nom()) for i in {0, 1})
         self.liste_joueurs[0].affiche_joueur(max_length)
         self.liste_joueurs[1].affiche_joueur(max_length)
@@ -178,6 +181,7 @@ def gestion_jeu():
 
     print("Choisissez la taille de la grille.")
 
+    # On s'assure que les paramètres donnés sont corrects.
     while True:
         try:
             taille = int(input())
@@ -189,7 +193,7 @@ def gestion_jeu():
 
     partie.affichage()
 
-    # boucle principale du jeu
+    # Boucle principale du jeu.
     while not partie.fin_partie():
         partie.gestion_tour()
         partie.affichage()
