@@ -8,7 +8,7 @@
 # Groupe 3
 # TP réalisé par RIU Clément et SPITZ Anne
 #
-# Rendu le
+# Rendu le 14 octobre 2016
 #
 # /////////////////////////////////////////////////////
 point = [5, 10, 20, 50, 100, 200]
@@ -17,17 +17,22 @@ point = [5, 10, 20, 50, 100, 200]
 class Grid:
     def __init__(self, taille):
         """
-        Constructeur.
-        :param taille:
+        Constructeur de la classe Grid.
+        :param taille de la grille souhaitée.
+        Si la taille est paire ou négative, on raise une exception.
         """
-        assert (taille % 2 == 1)
-        self._tableau = [[None for i in range(taille)] for i in range(taille)]
+
+        if taille % 2 == 0 or taille<0:
+            raise ValueError()
+        else:
+            self._tableau = [[None for i in range(int(taille))] for i in range(taille)]
 
     def get_taille(self):
         """
         Assesseur en lecture de la taille de la grille.
         :return: Un int correspondant à la taille de la Grid.
         """
+
         return len(self._tableau)
 
     def get_cellule(self, x):
@@ -37,6 +42,7 @@ class Grid:
         :param y: Coordonnée en ordonnée.
         :return: la valeur de la cellule.
         """
+
         assert x in self
         return self._tableau[x[0]][x[1]]
 
@@ -44,11 +50,12 @@ class Grid:
     def set_cellule(self, valeur, x):
         """
         Assesseur en écriture de la cellule de coordonnées (x, y)
-        :param valeur: valeur à mettre en (x, y)
+        :param valeur: valeur à mettre dans la cellule de coordonnées (x, y)
         :param x: Coordonnée en abscisse.
         :param y: Coordonnée en ordonnée.
         :return: Rien.
         """
+
         self._tableau[x[0]][x[1]] = valeur
 
     def __contains__(self, x):
@@ -57,6 +64,7 @@ class Grid:
         :param y: Coordonnée en ordonnée.
         :return: True si les coordonnées x et y sont valides. False sinon.
         """
+
         taille = self.get_taille()
         return x[0] * x[1] >= 0 and x[0] < taille and x[1] < taille
 
@@ -67,6 +75,7 @@ class Grid:
         :param position: actuelle du joueur
         :return: Rien
         """
+
         max_length = max(len(str(nombre)) for nombre in point)
         for i in range(self.get_taille()):
             ligne_a_afficher = ""
