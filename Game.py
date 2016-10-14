@@ -51,7 +51,7 @@ class Game:
 
         self.joueur_courant = 0
 
-        assert (type(taille) == int)
+        assert (isinstance(taille, int))
         self.tableau = Grid(taille)
         for x in range(taille):
             for y in range(taille):
@@ -87,7 +87,7 @@ class Game:
             position_voulue = add(self.positions, direction_acceptable[direction])
             if position_voulue not in self.tableau:
                 return True
-            elif not type(self.tableau.get_cellule(position_voulue)) == int:
+            elif not isinstance(self.tableau.get_cellule(position_voulue), int):
                 return True
             else:
                 return False
@@ -122,8 +122,8 @@ class Game:
 
         for direction in direction_acceptable.values():
             position_testee = add(self.positions, direction)
-            if position_testee in self.tableau and type(
-                    self.tableau.get_cellule(position_testee)) == int:
+            if position_testee in self.tableau and isinstance(
+                    self.tableau.get_cellule(position_testee), int):
                 return False
         return True
 

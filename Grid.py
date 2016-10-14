@@ -84,9 +84,10 @@ class Grid:
                     ligne_a_afficher += " {0}".format("#" * max_length)
                 else:
                     valeur = self.get_cellule((j, i))
-                    ligne_a_afficher += " {0: <{width}}{1}".format("", ["0", str(valeur)][type(valeur) == int],
-                                                                   width=max_length - [1, len(str(valeur))][
-                                                                       type(valeur) == int])
+                    ligne_a_afficher += " {0: <{width}}{1}".format("",
+                                        ["0", str(valeur)][isinstance(valeur, int)],
+                                        width=max_length - [1, len(str(valeur))][
+                                        isinstance(valeur, int)])
             print(ligne_a_afficher)
-        print ("\n")
+        print("\n")
         return None
